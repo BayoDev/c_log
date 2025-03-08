@@ -13,14 +13,16 @@ typedef struct {
     log_level level;
     bool log_time;
     pthread_mutex_t lock;
+    bool sync_all;
 } log_settings;
 
-static log_settings settings = {-1, false,NO_LOG, true,PTHREAD_MUTEX_INITIALIZER};
+static log_settings settings = {-1, false,NO_LOG, true,PTHREAD_MUTEX_INITIALIZER,false};
 
-void init_logging(int log_fd,bool log_to_stdout,log_level level){
+void init_logging(int log_fd,bool log_to_stdout,log_level level,bool sync_all){
     settings.log_fd = log_fd;
     settings.log_to_stdout = log_to_stdout;
     settings.level = level;
+    settings.sync_all = sync_all;
 }
 
 void log_message(log_level level, const char *file, int line, const char *fmt, ...){
@@ -54,8 +56,10 @@ void log_message(log_level level, const char *file, int line, const char *fmt, .
         dprintf(settings.log_fd,"\n");
     }
 
-    fsync(settings.log_fd);
-    fflush(stdout);
+    if(settings.sync_all){
+        fsync(settings.log_fd);
+        fflush(stdout);
+    }
 
     pthread_mutex_unlock(&settings.lock);
 

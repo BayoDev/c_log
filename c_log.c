@@ -29,7 +29,7 @@ void log_message(log_level level, const char *file, int line, const char *fmt, .
     
     // TODO: add time support
 
-    char* header_format_str = "[%s][%d][%s:%d] ";
+    char* header_format_str = "[%s][%lu][%s:%d] ";
 
     pthread_mutex_lock(&settings.lock);
 

@@ -23,7 +23,7 @@ typedef enum{
     NO_LOG
 } log_level;
 
-void init_logging(int log_fd,bool log_to_stdout,log_level level);
+void init_logging(int log_fd,bool log_to_stdout,log_level level.bool sync_all);
 void log_message(log_level level, const char *file, int line, const char *fmt, ...);
 
 #define log(level, ...) \

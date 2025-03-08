@@ -29,14 +29,14 @@ void log_message(log_level level, const char *file, int line, const char *fmt, .
     
     // TODO: add time support
 
-    char* header_format_str = "[%s][%lu][%s:%d] ";
+    char* header_format_str = "[%s][%d][%s:%d] ";
 
     pthread_mutex_lock(&settings.lock);
 
-    if(settings.log_to_stdout) printf(header_format_str,LOG_LEVEL_STR(level),pthread_self(),file,line);
+    if(settings.log_to_stdout) printf(header_format_str,LOG_LEVEL_STR(level),(int) syscall( __NR_gettid ),file,line);
     if(settings.log_fd!=-1){
         // TODO: add error handling
-        dprintf(settings.log_fd,header_format_str,LOG_LEVEL_STR(level),pthread_self(),file,line);
+        dprintf(settings.log_fd,header_format_str,LOG_LEVEL_STR(level),(int) syscall( __NR_gettid ),file,line);
     }
     
     va_list args1,args2;

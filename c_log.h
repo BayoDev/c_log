@@ -8,6 +8,10 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
+#include <linux/unistd.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
 #include <pthread.h>
 
 typedef enum{

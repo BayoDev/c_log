@@ -54,6 +54,9 @@ void log_message(log_level level, const char *file, int line, const char *fmt, .
         dprintf(settings.log_fd,"\n");
     }
 
+    fsync(settings.log_fd);
+    fflush(stdout);
+
     pthread_mutex_unlock(&settings.lock);
 
     va_end(args1);

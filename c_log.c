@@ -14,19 +14,21 @@ typedef struct {
     bool log_time;
     pthread_mutex_t lock;
     bool sync_all;
+    bool initialized;
 } log_settings;
 
-static log_settings settings = {-1, false,NO_LOG, true,PTHREAD_MUTEX_INITIALIZER,false};
+static log_settings settings = {-1, false,NO_LOG, true,PTHREAD_MUTEX_INITIALIZER,false,false};
 
 void init_logging(int log_fd,bool log_to_stdout,log_level level,bool sync_all){
     settings.log_fd = log_fd;
     settings.log_to_stdout = log_to_stdout;
     settings.level = level;
     settings.sync_all = sync_all;
+    settings.initialized = true;
 }
 
 void log_message(log_level level, const char *file, int line, const char *fmt, ...){
-    
+    if(!settings.initialized) return;
     if(level < settings.level) return;
     
     // TODO: add time support
